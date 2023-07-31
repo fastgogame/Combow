@@ -1,0 +1,24 @@
+# IntelliJ IDEA files
+.idea/
+
+# Gradle files
+.gradle/
+build/
+
+# Compiled Java classes
+*.class
+
+# Log files
+*.log
+
+# OS-specific files
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+bin/
+out/
+target/
