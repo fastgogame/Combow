@@ -14,6 +14,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("net.dv8tion:JDA:5.0.0-beta.12")
     implementation("ch.qos.logback:logback-classic:1.2.9")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
+    implementation("org.seleniumhq.selenium:selenium-java:4.11.0")
+
 }
 
 tasks.test {
