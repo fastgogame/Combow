@@ -2,8 +2,10 @@ package io.fastgogame;
 
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,6 +17,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClick
 
 
 public class EventListener extends ListenerAdapter {
+
     private boolean loginEditing = false;
     private boolean passwordEditing = false;
 
@@ -87,6 +90,8 @@ public class EventListener extends ListenerAdapter {
     private void handleStartServerCommand(MessageReceivedEvent event) throws SQLException {
         if (DatabaseConnector.isGuildExists(guildid) && isLoginDetailsFilled()) {
             guildid = event.getGuild().getId();
+            System.setProperty("webdriver.chrome.driver", "/usr/bin/google-chrome");
+            //  /opt/google/chrome/google-chrome
             WebDriver driver = new ChromeDriver();
             String loginInfo = "Bot service is unavailable";
             try {
@@ -150,5 +155,14 @@ public class EventListener extends ListenerAdapter {
             return "Login successful";
         }
         return "Incorrect login or password.Type \n!configure";
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        event.getGuild()
+                .getDefaultChannel()
+                .asStandardGuildMessageChannel()
+                .sendMessage("Hello!\nType !configure to set your login and password on PloudOS.\nType !startserver to start your server.")
+                .queue();
     }
 }
