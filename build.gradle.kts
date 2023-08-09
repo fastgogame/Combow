@@ -1,9 +1,10 @@
 plugins {
     id("java")
+    application
 }
 
-group = "com.fastgogame"
-version = "1.0-SNAPSHOT"
+group = "io.fastgogame"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -16,9 +17,21 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.9")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     implementation("org.seleniumhq.selenium:selenium-java:4.11.0")
-
+    implementation("org.postgresql:postgresql:42.6.0")
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("io.fastgogame.CombowBot")
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes["Main-Class"] = "io.fastgogame.CombowBot"
+    }
+    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
 }
