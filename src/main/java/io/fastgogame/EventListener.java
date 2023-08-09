@@ -88,9 +88,9 @@ public class EventListener extends ListenerAdapter {
     }
 
     private void handleStartServerCommand(MessageReceivedEvent event) throws SQLException {
+        guildid = event.getGuild().getId();
         if (DatabaseConnector.isGuildExists(guildid) && isLoginDetailsFilled()) {
-            guildid = event.getGuild().getId();
-            System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver-linux64");
+            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             //  /opt/google/chrome/google-chrome
             WebDriver driver = new ChromeDriver();
             String loginInfo = "Bot service is unavailable";
