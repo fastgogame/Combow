@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.SQLException;
@@ -92,7 +93,11 @@ public class EventListener extends ListenerAdapter {
         if (DatabaseConnector.isGuildExists(guildid) && isLoginDetailsFilled()) {
             System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             //  /opt/google/chrome/google-chrome
-            WebDriver driver = new ChromeDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("--disable-gpu");
+            chromeOptions.addArguments("--no-sandbox");
+            WebDriver driver = new ChromeDriver(chromeOptions);
             String loginInfo = "Bot service is unavailable";
             try {
                 loginInfo = checkLoginDetails(guildid, driver);
