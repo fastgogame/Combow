@@ -95,8 +95,9 @@ public class EventListener extends ListenerAdapter {
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--headless=new");
             chromeOptions.addArguments("--disable-gpu");
+            chromeOptions.addArguments("--disable-extensions");
+            chromeOptions.addArguments("--window-size=1024,768");
             chromeOptions.addArguments("--no-sandbox");
-            chromeOptions.addArguments("--disable-dev-shm-usage");
             WebDriver driver = new ChromeDriver(chromeOptions);
             String loginInfo = "Bot service is unavailable";
             try {
