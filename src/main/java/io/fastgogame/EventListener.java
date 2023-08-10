@@ -93,14 +93,14 @@ public class EventListener extends ListenerAdapter {
         if (DatabaseConnector.isGuildExists(guildid) && isLoginDetailsFilled()) {
             System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--no-sandbox");
             chromeOptions.addArguments("--headless=new");
+            chromeOptions.addArguments("--disable-dev-shm-usage");
             chromeOptions.addArguments("--disable-gpu");
             chromeOptions.addArguments("--window-size=1024,768");
             chromeOptions.addArguments("start-maximized");
             chromeOptions.addArguments("disable-infobars");
             chromeOptions.addArguments("--disable-extensions");
-            chromeOptions.addArguments("--disable-dev-shm-usage");
-            chromeOptions.addArguments("--no-sandbox");
             WebDriver driver = new ChromeDriver(chromeOptions);
             String loginInfo = "Bot service is unavailable";
             try {
