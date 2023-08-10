@@ -102,6 +102,7 @@ public class EventListener extends ListenerAdapter {
             chromeOptions.addArguments("--disable-extensions");
             chromeOptions.setExperimentalOption("useAutomationExtension", false);
             chromeOptions.addArguments("--disable-dev-shm-usage");
+            chromeOptions.addArguments("--remote-debugging-port=9222");
             chromeOptions.addArguments("--crash-dumps-dir=/tmp");
             WebDriver driver = new ChromeDriver(chromeOptions);
             String loginInfo = "Bot service is unavailable";
