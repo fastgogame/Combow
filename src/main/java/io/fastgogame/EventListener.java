@@ -10,9 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
@@ -178,15 +176,13 @@ public class EventListener extends ListenerAdapter {
             System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = getChromeOptions();
             WebDriver driver = new ChromeDriver(chromeOptions);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            driver.manage().window().fullscreen();
-            driver.get("https://ploudos.com/login/");
+            driver.get("https://www.google.com/");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
+            WebElement wrong = wait.until(elementToBeClickable(By.className("gNO89b")));
             event.getChannel().sendMessage(wrong.getText()).queue();
             driver.quit();
         } catch (TimeoutException e) {
-            System.out.println("qqqqqqq");
+            System.out.println("yuyiuyiuyiuyuiyuii");
         }
     }
 
@@ -198,8 +194,8 @@ public class EventListener extends ListenerAdapter {
         chromeOptions.addArguments("--disable-gpu");
         chromeOptions.addArguments("disable-infobars");
         chromeOptions.addArguments("--disable-extensions");
-        //chromeOptions.addArguments("--disable-dev-shm-usage");
-        //chromeOptions.addArguments("--remote-debugging-port=9222");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.setBinary("/usr/bin/google-chrome");
         return chromeOptions;
     }
 
