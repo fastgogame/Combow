@@ -175,8 +175,11 @@ public class EventListener extends ListenerAdapter {
     }
     public void handleSeleniumTest(MessageReceivedEvent event) {
         try {
+            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = getChromeOptions();
             WebDriver driver = new ChromeDriver(chromeOptions);
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.manage().window().fullscreen();
             driver.get("https://ploudos.com/login/");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
@@ -189,19 +192,14 @@ public class EventListener extends ListenerAdapter {
 
     @NotNull
     private static ChromeOptions getChromeOptions() {
-        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--headless=new");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.addArguments("--window-size=1024,768");
-        chromeOptions.addArguments("start-maximized");
         chromeOptions.addArguments("disable-infobars");
         chromeOptions.addArguments("--disable-extensions");
-        chromeOptions.setExperimentalOption("useAutomationExtension", false);
-        chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.addArguments("--remote-debugging-port=9222");
-        chromeOptions.addArguments("--crash-dumps-dir=/tmp");
+        //chromeOptions.addArguments("--disable-dev-shm-usage");
+        //chromeOptions.addArguments("--remote-debugging-port=9222");
         return chromeOptions;
     }
 
