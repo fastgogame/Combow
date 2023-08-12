@@ -2,10 +2,8 @@ package io.fastgogame;
 
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -58,6 +56,8 @@ public class EventListener extends ListenerAdapter {
             } catch (SQLException e) {
                 event.getChannel().sendMessage("Database connection failed").queue();
             }
+        } else if (message.equals("!test") && event.isFromGuild()) {
+            handleTest(event);
         }
     }
 
@@ -91,7 +91,7 @@ public class EventListener extends ListenerAdapter {
     private void handleStartServerCommand(MessageReceivedEvent event) throws SQLException {
         guildid = event.getGuild().getId();
         if (DatabaseConnector.isGuildExists(guildid) && isLoginDetailsFilled()) {
-            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+            //System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--no-sandbox");
             chromeOptions.addArguments("--headless=new");
@@ -168,13 +168,28 @@ public class EventListener extends ListenerAdapter {
         }
         return "Incorrect login or password.Type \n!configure";
     }
-
-    @Override
-    public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        event.getGuild()
-                .getDefaultChannel()
-                .asStandardGuildMessageChannel()
-                .sendMessage("Hello!\nType !configure to set your login and password on PloudOS.\nType !startserver to start your server.")
-                .queue();
+    public void handleTest(MessageReceivedEvent event) {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--headless=new");
+        chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--window-size=1024,768");
+        chromeOptions.addArguments("start-maximized");
+        chromeOptions.addArguments("disable-infobars");
+        chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.setExperimentalOption("useAutomationExtension", false);
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--remote-debugging-port=9222");
+        chromeOptions.addArguments("--crash-dumps-dir=/tmp");
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://ploudos.com/login/");
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
+            event.getChannel().sendMessage(wrong.getText()).queue();
+        } catch (TimeoutException e) {
+            System.out.println("qqqqqqq");
+        }
+        driver.quit();
     }
 }
