@@ -174,17 +174,17 @@ public class EventListener extends ListenerAdapter {
         return "Incorrect login or password.Type \n!configure";
     }
     public void handleSeleniumTest(MessageReceivedEvent event) {
-        ChromeOptions chromeOptions = getChromeOptions();
-        WebDriver driver = new ChromeDriver(chromeOptions);
-        driver.get("https://ploudos.com/login/");
         try {
+            ChromeOptions chromeOptions = getChromeOptions();
+            WebDriver driver = new ChromeDriver(chromeOptions);
+            driver.get("https://ploudos.com/login/");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
             event.getChannel().sendMessage(wrong.getText()).queue();
+            driver.quit();
         } catch (TimeoutException e) {
             System.out.println("qqqqqqq");
         }
-        driver.quit();
     }
 
     @NotNull
