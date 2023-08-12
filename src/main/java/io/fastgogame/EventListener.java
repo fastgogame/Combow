@@ -195,7 +195,7 @@ public class EventListener extends ListenerAdapter {
         chromeOptions.addArguments("disable-infobars");
         chromeOptions.addArguments("--disable-extensions");
         chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.setBinary("/chrome-linux64/chrome");
+        //chromeOptions.setBinary("/usr/bin/chrome");
         return chromeOptions;
     }
 
