@@ -8,12 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.*;
 import java.time.Duration;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 
 public class EventListener extends ListenerAdapter {
@@ -127,7 +126,7 @@ public class EventListener extends ListenerAdapter {
         driver.findElement(By.className("css-k8o10q")).click();
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-            WebElement startButton = wait.until(elementToBeClickable(By.className("btn-success")));
+            WebElement startButton = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-success")));
             startButton.click();
             return "Server is starting";
         } catch (TimeoutException e) {
@@ -162,7 +161,7 @@ public class EventListener extends ListenerAdapter {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            WebElement wrong = wait.until(elementToBeClickable(By.className("alert-danger")));
+            WebElement wrong = wait.until(ExpectedConditions.elementToBeClickable(By.className("alert-danger")));
             if (wrong != null) {
                 driver.quit();
             }
@@ -176,9 +175,9 @@ public class EventListener extends ListenerAdapter {
             System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = getChromeOptions();
             WebDriver driver = new ChromeDriver(chromeOptions);
-            driver.get("https://www.google.com/");
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement wrong = wait.until(elementToBeClickable(By.className("gNO89b")));
+            driver.get("https://ploudos.com/login/");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            WebElement wrong = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("btn-primary")));
             event.getChannel().sendMessage(wrong.getText()).queue();
             driver.quit();
         } catch (TimeoutException e) {
@@ -189,13 +188,12 @@ public class EventListener extends ListenerAdapter {
     @NotNull
     private static ChromeOptions getChromeOptions() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--no-sandbox");
+        //chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--headless=new");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.addArguments("disable-infobars");
-        chromeOptions.addArguments("--disable-extensions");
-        chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.setBinary("/usr/bin/chrome");
+        //chromeOptions.addArguments("disable-infobars");
+        //chromeOptions.addArguments("--disable-extensions");
+        //.addArguments("--disable-dev-shm-usage");
         return chromeOptions;
     }
 
