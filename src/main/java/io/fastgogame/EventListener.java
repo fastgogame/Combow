@@ -173,7 +173,7 @@ public class EventListener extends ListenerAdapter {
     }
     public void handleSeleniumTest(MessageReceivedEvent event) {
         try {
-            System.setProperty("webdriver.chrome.driver", "usr/bin/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions chromeOptions = getChromeOptions();
             WebDriver driver = new ChromeDriver(chromeOptions);
             driver.get("https://www.google.com/");
@@ -195,7 +195,7 @@ public class EventListener extends ListenerAdapter {
         chromeOptions.addArguments("disable-infobars");
         chromeOptions.addArguments("--disable-extensions");
         chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.setBinary("usr/bin/chrome");
+        chromeOptions.setBinary("/usr/bin/chrome");
         return chromeOptions;
     }
 
