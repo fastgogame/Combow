@@ -27,11 +27,3 @@ tasks.test {
 application {
     mainClass.set("io.fastgogame.CombowBot")
 }
-
-tasks.jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    manifest {
-        attributes["Main-Class"] = "io.fastgogame.CombowBot"
-    }
-    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
-}
