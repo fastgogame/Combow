@@ -4,11 +4,14 @@ import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 
@@ -57,7 +60,9 @@ public class EventListener extends ListenerAdapter {
                 event.getChannel().sendMessage("Database connection failed").queue();
             }
         } else if (message.equals("!test") && event.isFromGuild()) {
-            handleTest(event);
+            handleSeleniumTest(event);
+        } else if (message.equals("!db") && event.isFromGuild()) {
+            handleDBTest(event);
         }
     }
 
@@ -168,7 +173,23 @@ public class EventListener extends ListenerAdapter {
         }
         return "Incorrect login or password.Type \n!configure";
     }
-    public void handleTest(MessageReceivedEvent event) {
+    public void handleSeleniumTest(MessageReceivedEvent event) {
+        ChromeOptions chromeOptions = getChromeOptions();
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://ploudos.com/login/");
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
+            event.getChannel().sendMessage(wrong.getText()).queue();
+        } catch (TimeoutException e) {
+            System.out.println("qqqqqqq");
+        }
+        driver.quit();
+    }
+
+    @NotNull
+    private static ChromeOptions getChromeOptions() {
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--headless=new");
@@ -181,15 +202,20 @@ public class EventListener extends ListenerAdapter {
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--remote-debugging-port=9222");
         chromeOptions.addArguments("--crash-dumps-dir=/tmp");
-        WebDriver driver = new ChromeDriver(chromeOptions);
-        driver.get("https://ploudos.com/login/");
+        return chromeOptions;
+    }
+
+    private void handleDBTest(MessageReceivedEvent event) {
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement wrong = wait.until(elementToBeClickable(By.className("btn-primary")));
-            event.getChannel().sendMessage(wrong.getText()).queue();
-        } catch (TimeoutException e) {
-            System.out.println("qqqqqqq");
+            String query = "SELECT * FROM userdata WHERE login = ?";
+            try (PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query)) {
+                statement.setString(1, "fastgogame");
+                try (ResultSet result = statement.executeQuery()) {
+                    event.getChannel().sendMessage(result.getStatement().toString()).queue();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        driver.quit();
     }
 }
