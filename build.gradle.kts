@@ -18,6 +18,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     implementation("org.seleniumhq.selenium:selenium-java:4.11.0")
     implementation("org.postgresql:postgresql:42.6.0")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+
 }
 
 tasks.test {
